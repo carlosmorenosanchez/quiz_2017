@@ -222,3 +222,97 @@ exports.check = function (req, res, next) {
         answer: answer
     });
 };
+
+
+
+
+
+
+
+
+// GET /quizzes/random_play
+exports.randomplay = function (req, res, next) {
+
+
+    if(!req.session.p52){
+        req.session.p52={pyp:[-1]};
+    }
+
+    if(req.session.p52.tope==req.session.p52.pyp.length-1){
+
+        var score = req.session.p52.pyp.length-1;
+
+
+        req.session.p52.pyp.length=1;
+        req.session.p52.tope.length=1;
+
+        delete req.session.p52.tope;
+
+        res.render('quizzes/randomnomore',{ score: score });
+
+
+    }
+    else {
+        models.Quiz.count({where: {id: {$notIn: req.session.p52.pyp}}})
+            .then(function (count) {
+                if (!req.session.p52.tope) {
+                    req.session.p52.tope = count;
+                }
+
+                var aleatoria = Math.floor(Math.random() * count);
+
+                return models.Quiz.findAll({where: {id: {$notIn: req.session.p52.pyp}}, limit: 1, offset: aleatoria});
+
+            })
+
+            .then(function (quizzes) {
+                var q = quizzes[0];
+
+                res.render('quizzes/randomplay', {quiz: q, score: req.session.p52.pyp.length - 1});
+
+            })
+    }
+
+};
+
+
+// GET /quizzes/randomcheck
+exports.randomcheck = function (req, res, next) {
+
+    var answer = req.query.answer|| "";
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+
+    if(result){
+
+        req.session.p52.pyp.push(req.quiz.id);
+        var score = req.session.p52.pyp.length-1;
+
+
+        res.render('quizzes/randomresult', {
+            quiz: req.quiz,
+            result: result,
+            answer: answer,
+            score: score
+        });
+
+
+
+    } else{
+
+        var score = req.session.p52.pyp.length-1;
+        
+        delete req.session.p52;
+
+        res.render('quizzes/randomresult', {
+            quiz: req.quiz,
+            result: result,
+            answer: answer,
+            score: 0
+        });
+
+    }
+
+};
+
+

@@ -46,7 +46,6 @@ router.get('/author', function (req, res, next) {
     res.render('author');
 });
 
-
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
 router.param('userId', userController.load);
@@ -131,5 +130,26 @@ router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
     sessionController.loginRequired,
     tipController.destroy);
 
+
+
+
+// Pagina de jugar
+//router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
+
+
+
+// Pagina de ayuda
+router.get('/help', function(req, res, next) {
+    res.render('help');
+});
+
+/*
+// Pagina de jugar
+router.get('/quizzes/random_play', function(req, res, next) {
+    res.render('random_play');
+});
+*/
 
 module.exports = router;
