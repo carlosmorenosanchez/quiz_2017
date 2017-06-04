@@ -30,10 +30,25 @@ router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 
 
+
+
+// Pagina de jugar
+//router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
+
+
+
 // Pagina de ayuda
 router.get('/help', function(req, res, next) {
     res.render('help');
 });
 
+/*
+// Pagina de jugar
+router.get('/quizzes/random_play', function(req, res, next) {
+    res.render('random_play');
+});
+*/
 
 module.exports = router;
