@@ -265,15 +265,14 @@ exports.randomcheck = function (req, res, next) {
 
     } else{
 
-        var score = req.session.p52.pyp.length-1;
-
+        
         delete req.session.p52;
 
         res.render('quizzes/randomresult', {
             quiz: req.quiz,
             result: result,
             answer: answer,
-            score: score
+            score: 0
         });
 
     }
