@@ -273,7 +273,7 @@ exports.randomcheck = function (req, res, next) {
             quiz: req.quiz,
             result: result,
             answer: answer,
-            score: 0
+            score: score
         });
 
     }
