@@ -248,35 +248,41 @@ exports.randomcheck = function (req, res, next) {
 
     var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
 
-    if(result){
+    var score;
 
+    if(req.session.p52 && result){
         req.session.p52.pyp.push(req.quiz.id);
-        var score = req.session.p52.pyp.length-1;
+        score = req.session.p52.pyp.length-1;
+
+    }else{
+
+        if(result){
+
+            score = 1;
 
 
-        res.render('quizzes/randomresult', {
-            quiz: req.quiz,
-            result: result,
-            answer: answer,
-            score: score
-        });
+        } else{
+
+            var score = 0;
+
+            if(req.session.p52){
+                delete req.session.p52;
+            }
 
 
 
-    } else{
+        }
 
-        var score = req.session.p52.pyp.length-1;
-        
-        delete req.session.p52;
 
-        res.render('quizzes/randomresult', {
-            quiz: req.quiz,
-            result: result,
-            answer: answer,
-            score: 0
-        });
 
     }
+
+    res.render('quizzes/randomresult', {
+        quiz: req.quiz,
+        result: result,
+        answer: answer,
+        score: score
+});
 
 };
 
